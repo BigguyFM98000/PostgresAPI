@@ -1,10 +1,11 @@
 const express = require('express')
 const studentRoutes = require('./students/routes');
 const app = express()
+require('dotenv').config()
 const port = 4200
 const pg = require('pg');
 const ClientClass = pg.Client;
-const pgUrl = "postgres://worugfut:BpVPgRvmWKS9XuVFkrAOBWzhENYN4y2A@drona.db.elephantsql.com/worugfut";
+const pgUrl = process.env.PG_URL;
 const client = new ClientClass(pgUrl);
 
 app.use(express.json())
