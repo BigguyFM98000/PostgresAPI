@@ -2,12 +2,33 @@ const express = require('express')
 const studentRoutes = require('./students/routes');
 const app = express()
 const port = 4200
+const pg = require('pg');
+const ClientClass = pg.Client;
+const pgUrl = "postgres://worugfut:BpVPgRvmWKS9XuVFkrAOBWzhENYN4y2A@drona.db.elephantsql.com/worugfut";
+const client = new ClientClass(pgUrl);
 
 app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send( "Welcome to my Postgres API");
 })
+
+async function connect(client) {
+    try {
+        await client.connect();
+        console.log('Client connected.');
+
+        const {rows} = await client.query('SELECT * FROM EMPLOYEES');
+        console.table(rows);
+        await client.end();
+    } catch (error) {
+        console.log(error);
+    } finally {
+        await client.end();
+    }
+}
+
+connect(client);
 
 app.use('/students', studentRoutes);
 
